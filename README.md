@@ -5,7 +5,8 @@
 This tests on a tiny postcode database with a small internal CSV file of postcodes in a column named `postcode`:
 
 ```
-docker run  -it --rm phlab ./test_postcodes.r ./test_data/postcodes.sqlite ./test_data/test1.csv postcode
+docker run  -it --rm barryrowlingson/phlab \
+    ./test_postcodes.r ./test_data/postcodes.sqlite ./test_data/test1.csv postcode
 ```
 
 ## Production postcode lookup database:
@@ -19,7 +20,7 @@ export PHE=/data/rowlings/PHE/
 
 docker run \
  --mount type=bind,source=$PHE,target=/phe \
- -it --rm phlab \
+ -it --rm barryrowlingson/phlab \
  ./test_postcodes.r /phe/Postcodes/postcodes.sqlite ./test_data/test1.csv postcode
 ```
 

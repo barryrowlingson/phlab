@@ -12,7 +12,7 @@ pc_db = argv[1]
 pc_csv = argv[2]
 pc_column = argv[3]
 
-message("Testing postcodes in column: ",pc_column," of file ",pc_csv)
+message("Testing postcodes in column: \"",pc_column,"\" of file ",pc_csv)
 
 testcodes = read_postcodes_file(pc_csv)
 message("Testing ",nrow(testcodes)," records")
