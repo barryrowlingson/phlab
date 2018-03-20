@@ -17,11 +17,13 @@ message("Testing postcodes in column: \"",pc_column,"\" of file ",pc_csv)
 testcodes = read_postcodes_file(pc_csv)
 message("Testing ",nrow(testcodes)," records")
 
-unique_testcodes = data.frame(postcode = unique(testcodes[[pc_column]]))
+unique_testcodes = data.frame(postcode = gsub(" ","",unique(testcodes[[pc_column]])))
 
-pc_db = get_postcodes_db(pc_db, "postcodes","postcode")
 
-unique_testcodes$OK = test_postcodes(unique_testcodes$postcode, pc_db$postcode)
+message("Using spaceless postcodes.")
+pc_db = get_postcodes_db(pc_db, "postcodes","pcs")
+
+unique_testcodes$OK = test_postcodes(unique_testcodes$postcode, pc_db$pcs)
 
 total <- nrow(unique_testcodes)
 found <- sum(unique_testcodes$OK)
