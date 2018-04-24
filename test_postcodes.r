@@ -17,16 +17,21 @@ message("Testing postcodes in column: \"",pc_column,"\" of file ",pc_csv)
 testcodes = read_postcodes_file(pc_csv)
 message("Testing ",nrow(testcodes)," records")
 
+if(!(pc_column %in% names(testcodes))){
+    stop("No column ", pc_column," in ",paste0(names(testcodes),collapse=","))
+}
+
 unique_testcodes = data.frame(postcode = gsub(" ","",unique(testcodes[[pc_column]])))
 
-
 message("Using spaceless postcodes.")
-pc_db = get_postcodes_db(pc_db, "postcodes","pcs")
+pc_db = get_postcodes_db(sqlite=pc_db, table="postcodes",column="pcs")
 
-unique_testcodes$OK = test_postcodes(unique_testcodes$postcode, pc_db$pcs)
+print(head(pc_db))
 
-total <- nrow(unique_testcodes)
-found <- sum(unique_testcodes$OK)
+unique_code = test_postcodes(unique_testcodes$postcode, pc_db$pcs)
+
+total <- length(unique_code)
+found <- sum(unique_code)
 
 message("Postcode database size: ",nrow(pc_db))
 
