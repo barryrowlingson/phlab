@@ -1,0 +1,12 @@
+Package: UKpostcodes
+Title: Uk Postcode Manipulation
+Version: 0.0.0.9000
+Authors@R: person("Barry", "Rowlingson", email = "b.rowlingson@gmail.com", role = c("aut", "cre"))
+Description: Postal codes in the UK have a specific format. This package helps in the handling of them.
+Depends: R (>= 3.4.4)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+RoxygenNote: 6.0.1
+Imports: stringi
