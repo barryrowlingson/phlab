@@ -1,0 +1,19 @@
+---
+output: pdf_document
+---
+
+# Sample report
+
+This is a sample markdown report.
+
+```{r test}
+samp = data.frame(
+     X = runif(10),
+     Y = runif(10))
+m = lm(Y~X, data=samp)
+summary(m)
+```
+
+That's that.
+
+
