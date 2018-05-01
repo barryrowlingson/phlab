@@ -6,6 +6,12 @@ output: pdf_document
 
 This is a sample markdown report.
 
+The parameters are
+
+```{r args}
+print(args)
+```
+
 ```{r test}
 samp = data.frame(
      X = runif(10),
