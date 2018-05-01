@@ -9,7 +9,7 @@ This is a sample markdown report.
 The parameters are
 
 ```{r args}
-print(args)
+print(argv)
 ```
 
 ```{r test}
