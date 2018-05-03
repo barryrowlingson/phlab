@@ -4,7 +4,7 @@ description: >
 
 docopt: >
  usage: 
-   sample.Rmd -n <n> [-p -t <title>]
+   sample2.Rmd -n <n> [-p -t <title>]
 
  options:
   -p          Plot or not
