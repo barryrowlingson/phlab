@@ -1,0 +1,53 @@
+---
+description: >
+ Simulate data sets
+docopt: >
+ usage: 
+  simulation.Rmd -c <CASEFILE> -p <POSTCODEDB>
+
+ options:
+  -c <CASEFILE> CSV file of Total, Year, Date
+  -p <POSTCODEDB> Postcode database
+output:
+ pdf_document:
+  toc: false
+---
+
+
+# Simulating Data Sets
+
+```{r start}
+library(devtools)
+load_all("../phlabr")
+library(sf)
+```
+
+With a CSV file having three columns like:
+
+```
+Total,Year,Specimen date
+3,2012,01/01/2012
+5,2012,02/01/2012
+```
+
+Then fit a Poisson GLM to time:
+
+```{r read}
+m = fit_time_file(opts$c)
+```
+
+Read in the postcode database:
+
+```{r pcs}
+pc = st_read(opts$p,"postcodes")
+```
+
+Simulate the data:
+
+```{r sim}
+ss = sim_data(m, pc)
+head(ss)
+```
+
+which produces an `sf` object with `Date`, `postcode`, and `geometry`
+columns, being the point location of the postcode.
