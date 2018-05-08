@@ -24,9 +24,30 @@ output:
 library(devtools)
 load_all("../phlabr")
 message("Reading from ",opts$FILE)
-m = fit_time_file(opts$FILE)
+data = augment_data(read_time_data(opts$FILE))
+```
+
+# Model
+
+```{r model}
+m = fit_time_data(data)
+data$Fit = fitted(m)
 print(summary(m))
 ```
 
+# Data and Model Plot
 
+```{r plot}
+library(ggplot2)
+ggplot(data) + geom_line(aes(x=Date,y=Fit,group=Weekday,col=Weekday)) + geom_point(aes(x=Date,y=Total,col=Weekday))
+```
 
+# Weekly Data and Model
+
+```{r weekly}
+aw = aggregate_weeks(data)
+mw = fit_weekly(aw)
+summary(mw)
+aw$Fit = fitted(mw)
+ggplot(aw, aes(x=WeekStart, y=Fit)) + geom_line()  + geom_point(aes(x=WeekStart,y=Total))
+```
