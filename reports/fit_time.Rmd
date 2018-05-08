@@ -1,0 +1,32 @@
+---
+description: >
+ Fit a periodic GLM
+
+docopt: >
+ usage: 
+   fit_time.Rmd <FILE>
+
+ options:
+  <FILE> CSV file of Total, Year, Date
+output:
+ pdf_document:
+  toc: false
+ html_document:
+  toc: false
+ md_document:
+  toc: false
+---
+
+# Data
+
+
+```{r data}
+library(devtools)
+load_all("../phlabr")
+message("Reading from ",opts$FILE)
+m = fit_time_file(opts$FILE)
+print(summary(m))
+```
+
+
+
