@@ -3,11 +3,12 @@ description: >
  Simulate data sets
 docopt: >
  usage: 
-  simulation.Rmd -c <CASEFILE> -p <POSTCODEDB>
+  simulation.Rmd -c <CASEFILE> -p <POSTCODEDB> [-s <FORMAT>]
 
  options:
   -c <CASEFILE> CSV file of Total, Year, Date
   -p <POSTCODEDB> Postcode database
+  -s <FORMAT> save simulations in this format
 output:
  pdf_document:
   toc: false
@@ -51,3 +52,18 @@ head(ss)
 
 which produces an `sf` object with `Date`, `postcode`, and `geometry`
 columns, being the point location of the postcode.
+
+```{r save}
+if(!is.null(opts$s)){
+  if(opts$s == "csv"){
+    xy = st_coordinates(ss)
+    ss = data.frame(ss)
+    ss$geometry=NULL
+    ss = cbind(ss, xy)
+    write.csv(ss, file=file.path(output_dir,"simulations.csv"), row.names=FALSE)
+  }
+  if(opts$s == "rds"){
+    saveRDS(ss, file=file.path(output_dir,"simulations.rds"))
+  }
+}
+```

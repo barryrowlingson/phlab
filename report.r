@@ -57,6 +57,7 @@ assign("argv",argv,e)
 assign("opts",opts,e)
 assign("doc",doc,e)
 assign("yaml",yaml,e)
+assign("output_dir",output_dir, e)
 
 # render the document.
 message("Rendering")
