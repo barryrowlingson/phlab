@@ -1,0 +1,39 @@
+---
+description: >
+ Analyse last weeks data.
+docopt: >
+ usage: 
+  lastweek.Rmd -c <CASEFILE> -p <POSTCODEDB>
+
+ options:
+  -c <CASEFILE> CSV case file of Date and postcode
+  -p <POSTCODEDB> Postcode database
+
+output:
+ pdf_document:
+  toc: false
+---
+
+```{r start}
+library(devtools)
+load_all("../phlabr")
+library(sf)
+```
+
+# Read Data
+
+```{r readdata}
+data = read.table(opts$c)
+data$Date = as.Date(data$Date)
+lcw = last_complete_week(data$Date)
+lcwdata = data[lcw,]
+summary(lcwdata)
+head(lcwdata)
+```
+
+# Range of Data
+
+```{r range}
+range(lcwdata$Date)
+```
+
