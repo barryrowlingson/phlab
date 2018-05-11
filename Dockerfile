@@ -1,4 +1,4 @@
-FROM rocker/geospatial:3.4.3
+FROM barryrowlingson/geospatialplus
 
 WORKDIR /app
 
