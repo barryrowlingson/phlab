@@ -15,8 +15,10 @@ output:
 ---
 
 ```{r start}
+library(dplyr)
 library(devtools)
 load_all("../phlabr")
+load_all("../UKpostcodes")
 library(sf)
 ```
 
@@ -24,9 +26,7 @@ library(sf)
 
 ```{r readdata}
 data = read.table(opts$c)
-data$Date = as.Date(data$Date)
-lcw = last_complete_week(data$Date)
-lcwdata = data[lcw,]
+lcwdata = last_weeks_data(data)
 summary(lcwdata)
 head(lcwdata)
 ```
@@ -35,5 +35,41 @@ head(lcwdata)
 
 ```{r range}
 range(lcwdata$Date)
+```
+
+# Summary By Postcode Geography
+
+## Postcode Areas
+
+```{r pca}
+areas = table(pc_area(lcwdata$postcode))
+sort(areas, dec=TRUE)
+```
+
+## Postcode District
+```{r pcd}
+districts = table(pc_district(lcwdata$postcode))
+sort(districts, dec=TRUE)
+```
+
+## Postcode Sectors with more than 1 case
+```{r pcs}
+sectors = table(pc_sector(lcwdata$postcode))
+big2 = sectors[sectors>1]
+sort(big2, dec=TRUE)
+```
+
+
+# Standardized Incidence Ratio
+
+## Postcode Areas
+
+```{r sirarea}
+areas = lcwdata %>% group_by(area=pc_area(postcode)) %>% summarise(n=n())
+pc_areas = st_read(opts$p,"pc_areas")
+area_data = join_to_spatial(areas, pc_areas, c("pc_area"="area"),"n")
+area_data$sir = sir(area_data, "n", "pop")
+area_data
+plot(area_data[,"sir"],pch=19)
 ```
 
