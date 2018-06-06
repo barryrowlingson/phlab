@@ -1,0 +1,20 @@
+---
+description: >
+ Map last N weeks postcode districts
+docopt: >
+ usage: 
+  nweekmap.Rmd -c <CASEFILE> -p <POSTCODEDB> -n <NWEEKS>
+
+ options:
+  -c <CASEFILE> CSV case file of Date and postcode
+  -p <POSTCODEDB> Postcode database
+  -n <NWEEKS> Number of weeks history to map
+
+output:
+ md_document:
+  toc: false
+ pdf_document:
+  toc: false
+  fig_caption: true
+  keep_tex: true
+---

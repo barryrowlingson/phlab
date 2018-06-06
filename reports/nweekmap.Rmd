@@ -1,0 +1,81 @@
+---
+description: >
+ Map last N weeks postcode districts
+docopt: >
+ usage: 
+  nweekmap.Rmd -c <CASEFILE> -p <POSTCODEDB> -n <NWEEKS>
+
+ options:
+  -c <CASEFILE> CSV case file of Date and postcode
+  -p <POSTCODEDB> Postcode database
+  -n <NWEEKS> Number of weeks history to map
+
+output:
+ md_document:
+  toc: false
+ pdf_document:
+  toc: false
+  fig_caption: true
+  keep_tex: true
+---
+
+
+
+```{r start}
+library(dplyr)
+library(devtools)
+library(tmap)
+load_all("../phlabr")
+load_all("../UKpostcodes")
+library(sf)
+```
+
+# Read Data
+
+```{r readdata}
+nweeks = as.numeric(opts$n)
+data = read.table(opts$c, sep=",", head=TRUE)
+data$dweek= data_week(data$Date)
+data$pc_district = pc_district(data$postcode)
+pc_districts = st_read(opts$p,"pc_districts")
+data_d = st_aggregate_weekly(pc_districts,"pc_district",weeks=10, data, "pc_district","Date")
+data_pts = left_join(pc_districts, data_d, c("pc_district"="s"))
+
+pc_districts_poly = st_read(opts$p,"pc_district_poly")
+data_poly = left_join(pc_districts_poly, data_d, c("pc_district"="s"))
+data_poly$RR = 100000*data_poly$Freq/data_poly$pop
+```
+
+# Weekly Maps
+
+
+```{r map}
+weekmin = max(data_poly$t) - nweeks + 1
+tm_shape(data_poly %>% filter(t >= weekmin)) + tm_polygons(col="RR") + tm_facets(by="t", drop.units=TRUE)
+```
+
+# Total Maps
+
+```{r totalmaps, fig.cap="Total maps by area"}
+data_total = data_poly %>% group_by(pc_district) %>% summarise(total = sum(Freq), pc_area=pc_area[1], pop=pop[1], geom=geom[1])
+data_total$RR = 100000*data_total$total/data_total$pop
+#tm_shape(data_total) + tm_polygons(col="RR") + tm_facets(by="pc_area",drop.units=TRUE,free.coords=TRUE)
+maps = lapply(unique(data_total$pc_area), function(area){
+     tm_shape(data_total[data_total$pc_area == area,]) + tm_polygons(col="RR")
+})
+names(maps) = unique(data_total$pc_area)
+```
+
+```{r figures, echo=FALSE}
+for(n in names(maps)){
+
+cat("## ",n,"\n")
+cat("\\begin{figure}\n")
+print(maps[[n]])
+cat("\\end{figure}\n")
+cat("\n\n\n\n")
+
+}
+
+```
+
