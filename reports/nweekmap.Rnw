@@ -78,7 +78,7 @@ names(maps) = unique(data_total$pc_area)
 @
 
 <<build-weekly, include=FALSE>>=
-template = "<<map-%s, fig.width=6, fig.height=6, out.width='6in', fig.align='center', echo=FALSE>>=
+template = "<<map-%s, fig.width=6, fig.height=8, out.width='7in', fig.align='center', echo=FALSE>>=
 print(maps[['%s']])
 @\n"
 
